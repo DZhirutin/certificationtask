@@ -1,17 +1,6 @@
 provider "aws" {
-  region = "eu-west-3"
+  region = var.region
 }
-
-variable vpc_cidr_block {}
-variable subnet_1_cidr_block {}
-variable avail_zone {}
-variable env_prefix {}
-variable env_prefix_1 {}
-variable env_prefix_2 {}
-variable my_ip {}
-variable jenkins_ip {}
-variable instance_type {}
-variable public_key_location {}
 
 resource "aws_vpc" "myapp-vpc" {
   cidr_block = var.vpc_cidr_block
@@ -94,12 +83,6 @@ output "aws_ami_id_ubuntu" {
     value = data.aws_ami.latest-ubuntu-image.id
 }
 
-resource "aws_key_pair" "ssh-key" {
-    key_name = "server-key"
-    public_key = file(var.public_key_location)
-}
-
-
 resource "aws_instance" "build" {
     ami = data.aws_ami.latest-ubuntu-image.id
     instance_type = var.instance_type
@@ -109,7 +92,7 @@ resource "aws_instance" "build" {
     availability_zone = var.avail_zone
 
     associate_public_ip_address = true
-    key_name = aws_key_pair.ssh-key.key_name
+    key_name = "myapp-key-pair"
 
     tags = {
         Name = "${var.env_prefix_1}-server"
@@ -128,7 +111,7 @@ resource "aws_instance" "prod" {
     availability_zone = var.avail_zone
 
     associate_public_ip_address = true
-    key_name = aws_key_pair.ssh-key.key_name
+    key_name = "myapp-key-pair"
 
     tags = {
         Name = "${var.env_prefix_2}-server"

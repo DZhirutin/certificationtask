@@ -1,5 +1,13 @@
+#files boxfuse
 *.ipr
 *.iws
 *.iml
 target
 /.idea/
+# local .terraform dir
+.terraform/*
+#tf state files
+*.tfstate
+*.tfstate.*
+#tf variable files
+*.tfvars

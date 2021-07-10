@@ -11,4 +11,3 @@ target
 *.tfstate.*
 #tf variable files
 *.tfvars
-variables.tf

@@ -1,6 +1,6 @@
 ---
 - name: Build app
-  hosts: all
+  hosts: tag_Name_build_server
   become: yes
   gather_facts: False
   tasks: 

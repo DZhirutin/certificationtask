@@ -4,7 +4,7 @@ pipeline {
         ANSIBLE_SERVER = "35.232.84.72"
     }
     stages {
-        stage('Provision server') {
+        stage("provision server") {
             environment {
                 AWS_ACCESS_KEY_ID = credentials('jenkins_aws_access_key_id')
                 AWS_SECRET_ACCESS_KEY = credentials('jenkins_aws_secret_access_key')
@@ -20,7 +20,7 @@ pipeline {
 
            }
         }
-        stage('copy files to ansible server') {
+        stage("copy files to ansible server") {
             steps {
                 script {
                     echo "copying  all neccessary files to ansible control node"
@@ -36,10 +36,22 @@ pipeline {
             }
         }
     
-        stage('Prod server ansible') {
+        stage("execute ansible playbook") {
             steps {
-                sh 'echo "This is test deploy"'
+                script {
+                    echo "calling ansible playbook to configure ec2 instances"
+                    def remote = [:]
+                    remote.name = "ansible-server"
+                    remote.host = ANSIBLE_SERVER
+                    remote.allowAnyHosts = true
+
+                    withCredentials([sshUserPrivateKey(credentialsId: 'ansible-server-key', keyFileVariable: 'keyfile', usernameVariable: 'user')]){
+                        remote.user = user
+                        remote.identityFile = keyfile
+                        sshCommand remote: remote, command: "ls -l"
+                    }
+                }
             }
         }
-    }
+    }   
 }

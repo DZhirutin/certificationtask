@@ -30,6 +30,8 @@ pipeline {
                         withCredentials([sshUserPrivateKey(credentialsId: 'server-ssh-key', keyFileVariable: 'keyfile', usernameVariable: 'user')]) {
                             sh 'scp $keyfile root@$ANSIBLE_SERVER:/root/myapp-key-pair.pem'
 
+                        }
+                    }
                 }
             }
         }
@@ -37,8 +39,7 @@ pipeline {
         stage('Prod server ansible') {
             steps {
                 sh 'echo "This is test deploy"'
-
-           }
+            }
         }
     }
 }

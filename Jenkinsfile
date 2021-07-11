@@ -1,6 +1,8 @@
 pipeline {
     agent any
-
+    environment {
+        ANSIBLE_SERVER = "35.232.84.72"
+    }
     stages {
         stage('Provision server') {
             environment {
@@ -18,11 +20,18 @@ pipeline {
 
            }
         }
-        stage('Build server ansible') {
+        stage('copy files to ansible server') {
             steps {
-                sh 'echo "This is test build"'
+                script {
+                    echo "copying  all neccessary files to ansible control node"
+                    sshagent(['ansible-server-key']) {
+                        sh "scp -o StrictHostKeyChecking=no ansible/* root@${ANSIBLE_SERVER}:/root"
 
-           }
+                        withCredentials([sshUserPrivateKey(credentialsId: 'server-ssh-key', keyFileVariable: 'keyfile', usernameVariable: 'user')]) {
+                            sh 'scp $keyfile root@$ANSIBLE_SERVER:/root/myapp-key-pair.pem'
+
+                }
+            }
         }
     
         stage('Prod server ansible') {

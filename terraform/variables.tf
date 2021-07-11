@@ -29,6 +29,9 @@ variable my_ip {
 variable jenkins_ip {
     default = "35.225.175.226/32"
 }
+variable ansible_ip {
+    default = "35.232.84.72/32"
+}
 variable instance_type {
     default = "t2.micro"
 }

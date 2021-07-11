@@ -1,0 +1,28 @@
+---
+- name: Build app
+  hosts: all
+  become: yes
+  gather_facts: False
+  tasks: 
+    - name: Update repo and cache
+      apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
+    - name: Install default-jdk git maven
+      apt:
+        pkg: 
+          - default-jdk
+          - git
+          - maven
+
+    - name: Download project from github
+      git:
+       repo: https://github.com/boxfuse/boxfuse-sample-java-war-hello.git 
+       dest: /tmp/boxfuse-sample-java-war-hello/
+    - name: build app maven
+      command: mvn package
+      args:
+       chdir: /tmp/boxfuse-sample-java-war-hello/
+
+    - name: Copy .war file from remote host to local host
+      synchronize:  src={{ item }} dest=/tmp/ mode=pull
+      with_items:
+       - "/tmp/boxfuse-sample-java-war-hello/target/hello-1.0.war"

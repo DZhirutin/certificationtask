@@ -1,10 +1,6 @@
 pipeline {
     agent any
 
-    tools {
-        maven "Maven"
-    }
-
     stages {
         stage('Provision server') {
             environment {
@@ -22,14 +18,14 @@ pipeline {
 
            }
         }
-        stage('pro') {
+        stage('Build server ansible') {
             steps {
-                sh 'echo "This is test push"'
+                sh 'echo "This is test build"'
 
            }
         }
     
-        stage('deploy') {
+        stage('Prod server ansible') {
             steps {
                 sh 'echo "This is test deploy"'
 

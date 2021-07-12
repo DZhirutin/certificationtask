@@ -45,17 +45,17 @@
 
     - name: Download project from github
       git:
-       repo: https://github.com/boxfuse/boxfuse-sample-java-war-hello.git 
-       dest: /tmp/boxfuse-sample-java-war-hello/
+       repo: https://github.com/DZhirutin/certificationtask.git
+       dest: /tmp/certificationtask/
     - name: build app maven
       command: mvn package
       args:
-       chdir: /tmp/boxfuse-sample-java-war-hello/
+       chdir: /tmp/certificationtask/
     
     - name: copy Dockerfile
       copy:
         src: ./Dockerfile
-        dest: /tmp/boxfuse-sample-java-war-hello/
+        dest: /tmp/certificationtask/
         owner: root
         group: root
         mode: '0644'
@@ -63,7 +63,7 @@
     - name: build container image
       docker_image:
         name: myapp:1.0
-        build_path: /tmp/boxfuse-sample-java-war-hello/
+        build_path: /tmp/certificationtask/
 
     - name: archive container image as a tarball
       docker_image:

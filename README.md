@@ -2,8 +2,8 @@
 dzhirutin repository
 
 ### Create dedicated servers
-Jenkins-server
-Ansible-server
+- Jenkins-server
+- Ansible-server
 
 
 boxfuse-sample-java-war-hello
